@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>	
+<head>		
+<meta charset="utf-8">
+<title>Banner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ad.size" content="width=300,height=250">
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- using google hosted GreenSock libraries to avoid CDN issues with publishers -->
+<script type="text/javascript" charset="utf-8" src="https://s0.2mdn.net/ads/studio/cached_libs/tweenlite_1.18.0_56fa823cfbbef1c2f4d4346f0f0e6c3c_min.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://s0.2mdn.net/ads/studio/cached_libs/easepack_1.18.0_ed5816e732515f56d96a67f6a2a15ccb_min.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://s0.2mdn.net/ads/studio/cached_libs/cssplugin_1.18.0_71489205621d46cbe88348eeb8fe493f_min.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://s0.2mdn.net/ads/studio/cached_libs/timelinelite_1.18.0_dbe88c20554c170a56f44600f31a97d9_min.js"></script>
+<script type="text/javascript">
+	var clickTag = 'http://www.google.ca';
+	function onClickTag(e){ window.open(window.clickTag); }
+	window.onload = function(){ initializeBanner(); }
+</script>
+<script src='banner.js'></script>
+</head>
+<body>
+	<div id='banner'>
+		<img id="hero" src='hero.png'>
+		<img id="copy1" src='copy1.png'>
+		<img id="copy2" src='copy2.png'>
+		<div id='border'></div>	
+		<div id='hitarea'></div>
+	    <div id='cta'><img src="cta.png"></div>
+	</div>
+</body>
+</html>
