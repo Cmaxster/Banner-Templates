@@ -1,104 +1,106 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html>  
 <head>    
   <meta charset="utf-8">
-  <title>Banner</title>
+  <title>Generic Banner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="ad.size" content="width=300,height=600">
-  <!-- loading from Google CDN saves on file size. 99.9% of the time publishers are ok with this -->
-  <script src="https://s0.2mdn.net/ads/studio/cached_libs/easepack_1.19.0_be87087c08fcec83e2b64c70571fe91f_min.js"></script>
-  <script src="https://s0.2mdn.net/ads/studio/cached_libs/cssplugin_1.19.0_cfbff7d208ccfdbe176b9855af1eb1fa_min.js"></script>
-  <script src="https://s0.2mdn.net/ads/studio/cached_libs/tweenlite_1.19.0_422f021fad4c20f20cf3640a06ac39e9_min.js"></script>
-  <script src="https://s0.2mdn.net/ads/studio/cached_libs/timelinelite_1.19.0_13e3bd0e510d63fd5e5ef9bf9dac7017_min.js"></script>
+  <script src="https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.1.0_min.js"></script>
   <style type="text/css">
     * { padding: 0px; margin: 0px; }
     body { margin:0px; }
     body:after { display:none; }
-    .banner-size { width: 300px; height: 600px; } /* makes quick resizing of unit easy */
-    .hide { opacity: 0; } /* makes hiding elements on load easy */
-    #banner img, #banner div { position: absolute; border: 0; } /* makes quick x,y positioning easy */
+    .banner-size { width: 300px; height: 600px; }
+    .hide { opacity: 0; }
+    .hide-left-short { opacity: 0; transform: translateX(-30px)}
+    .hide-bottom-short { opacity: 0; transform: translateY(30px)}
+    #banner img, #banner div {position: absolute; border: 0;}
     #banner { 
-      background: #f3faf3 url(background.jpg);
-      /*border: 1px solid #c7c7c7;*/
-      /* border does not display inside iframe, box shadow work-around allows border to display inside div */
-      cursor: pointer;
+      background: #fff url(background.png);
+      background-size: contain;
+      cursor: pointer; 
       overflow: hidden;
       position: relative;
     }
     #frame { box-shadow: inset -1px 0 0 #c7c7c7, inset 0 -1px 0 #c7c7c7, inset 1px 0 0 #c7c7c7, inset 0 1px 0 #c7c7c7; pointer-events : none; }
     #cta {
-      border-radius: 5px;
-      width: 128px;
-      height: 28px;
-      background: #c55415 url(cta.png) center center no-repeat;
-      /* allows for maximum flexibilty in sizing the ctas. copy will always be centered, and cta can be made to any size */
-      z-index: 1000; /* just in case cta gets buried.. ensures hover works */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: red;
+      padding: calc(21px/2) calc(59px/2);
+      border-radius: 13px;
+      transform: translate(18px, 476px);
     }
-    #cta:hover { background: #71310A url(cta.png) center center no-repeat }
+    #cta:hover {
+      background: pink;
+    }
+    #cta img {position: relative;}
   </style>
   <script type="text/javascript">
-    var clickTag = "http://www.google.ca";
-    function onClickTag(e){ window.open(window.clickTag); }
-    window.onload = function(){ 
-      var clickArea = document.getElementById("clickArea");
-      if (clickArea.addEventListener){
-        clickArea.addEventListener('click', onClickTag, false); 
-      } else if (clickArea.attachEvent){ 
-        /* attachEvent() is for IE specifically. has a hard time with addEventListener(). avoid using <a href>! has caused trouble in the past.. */
-        clickArea.attachEvent('onclick', onClickTag);
+    // preload('cta-on.png');
+    var clickTag = "http://www.google.ca",
+    retArray = document.getElementsByClassName("ret");
+    function initializeAd(){ 
+      for (var i = 0; i < retArray.length; i++) {
+        var theWidth = retArray[i].offsetWidth,
+            theHeight = retArray[i].offsetHeight;
+        retArray[i].style.width = theWidth/2+'px';
+        retArray[i].style.height = theHeight/2+'px';
+        retArray[i].setAttribute("style","height:"+theHeight/2+"px; width:"+theWidth/2+"px;");
       }
-      // use of timelineLite allows for easy sequencing..
-      var timeline = new TimelineLite();
-      timeline
-        // .set("#phone-animation", {transform: 'translate(10px, 20px) scale(0.75)'}) 
-        // use .set to setup complex transforms (rotate, scale, etc.) 
-        // ensures 100% cross browser compatibilty.
-        // do these before #banner autoAlpha 1 to avoid flickering when banner loads.
-        .set("#banner", {autoAlpha:1}) // banner is loaded and all elements ready for display.
-
-        // When using Greensock...
-        // use x:100 y:100 instead of top:100 left:100
-        // This avoids stuttering/jittery animations.
-        // If needed, use CSS transform to improve performance.
-
-        // .set("#hero", {x:300})
-        // .to("#t1", 0.75, {autoAlpha:1})
-        // .to("#t2", 0.75, {autoAlpha:1}, "+=0.5")
-        // .to("#t1", 0.75, {autoAlpha:0}, "+=2.5")
-        // .to("#t3, #legal", 0.75, {autoAlpha:1})
-        // .to("#hero", 0.5, {autoAlpha:1, x:0, ease:Power2.easeOut})
-        // .to("#t3", 0.75, {autoAlpha:0}, "+=2.25")
-        // .to("#t4", 0.75, {autoAlpha:1})
-        // .to("#cta", 0.75, {autoAlpha:1}, "+=0.5")
+      _("#clickArea").on('click',function(){window.open(window.clickTag);});
+        var main_timeline = new TimelineMax();
+          main_timeline
+          .set("#banner", {autoAlpha:1})
+          .from("#group-laptop", 1, {x:-300, ease:Quint.easeOut})
+          .to("#t1", 0.6, {autoAlpha:1})
+          .to("#t1", 0.6, {autoAlpha:0}, "+=1.75")
+          .to("#laptop-screen-2", 0.6, {autoAlpha:1})
+          .to("#t2", 0.6, {autoAlpha:1})
+          .to("#t2", 0.6, {autoAlpha:0}, "+=2")
+          .to("#laptop, #laptop-screen-2", 1, {autoAlpha:0, ease:Quint.easeOut})
+          .to("#ef", 0.6, {autoAlpha:1})
+          .to("#pp", 0.6, {autoAlpha:1})
+          .to("#cta", .75, {autoAlpha:1}, "+=0.5")
     }
   </script>
 </head>
 <body>
-  <!-- absolute banner wrapper -->
   <div id="banner" class="hide banner-size">
-    <!-- in case you have content that shouldn't trigger clickTag -->
-    <div id="clickArea" class="banner-size"> 
-      <!-- Content elements stack like layers.. -->
-      <!-- Complex animations nested in divs... -->
-      <!-- Allows for reusability with easy copy paste and CSS scaling... -->
-      <!-- 
-        <div id="phone-animation"> start with 300x600 and then use transform > Scale to size down for other sizes.
-          <img id="phone-screen">
-          <img id="phone-button-pad">
-          <div id="phone-spritesheet></div>
-        </div>
-        <img id="hero" class="hide" src="hero.png" alt="hero term used for primary visual element in banner">
-        <img id="t1" class="hide" src="t1.png" alt="t1, t2, t3 is order of copy from start to finish">
-        <img id="t2" class="hide" src="t2.png" alt="">
-        <img id="t3" class="hide" src="t3.png" alt="">
-        <img id="t4" class="hide" src="t4.png" alt="">
-        <img id="legal" class="hide" src="legal.png" alt=""> 
-      -->
-      <div id="cta" class="hide"></div>
+    <div id="clickArea" class="banner-size">
+    <img id="t1" class="ret hide" src="t1.png">
+    <img id="t2" class="ret hide" src="t2.png">
+    <img id="ef" class="ret hide" src="ef.png">
+    <img id="pp" class="ret hide" src="pp.png">
+    <div id="group-laptop">
+      <img id="laptop" class="ret" src="laptop.png">
+      <img id="laptop-screen-2" class="ret hide" src="laptop-screen-2.png">
     </div>
-    <!-- border frame sits within the banner on top of everything else -->
-    <!-- HTML renders bottom up, so put top layers on bottom, and bottom on top -->
     <div id="frame" class="banner-size"></div>
+    <div id="cta" class="hide"><img src="cta.png" class="ret"></div>
   </div>
+  <script type="text/javascript">
+    (function(){
+    var _ = function(a) {return new q(a);},
+           q = function (a) {var b = (typeof a === 'string') ? document.querySelector(a) : a;this.c = b;return this;};  
+        _.fn = q.prototype = {
+        off: function(a, b) {if(this.c.addEventListener) {this.c.removeEventListener(a, b, false);}else if(this.c.attachEvent) {this.c.detachEvent('on'+a, b);};return this;},
+        on: function(a, b) {if(this.c.addEventListener) {this.c.addEventListener(a, b, false);}else if(this.c.attachEvent) {this.c.attachEvent('on'+a, b);};  return this;},
+        add: function(a) {this.c.innerHTML = a; return this;}
+    };
+        if(!window._) {window._=_;}
+    })();
+    _(window).on('load', function() {
+      var images = [];
+      function preload() {
+          for (var i = 0; i < arguments.length; i++) {
+              images[i] = new Image();
+              images[i].src = preload.arguments[i];
+          }
+      }
+      initializeAd();
+    });
+  </script>
 </body>
 </html>
